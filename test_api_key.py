@@ -3,14 +3,17 @@ from openai import OpenAI
 
 client = OpenAI(
     # 若没有配置环境变量，请用百炼API Key将下行替换为：api_key="sk-xxx",
-    api_key=os.getenv("sk-b1672f7a1cbb48bdb9377237ec273587"),
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+    # api_key="sk-b1672f7a1cbb48bdb9377237ec273587",
+    api_key=os.getenv("OPENAI_API_KEY"),  #
+    # base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+    base_url= "http://localhost:11434/v1",
 )
 completion = client.chat.completions.create(
-    model="qwen3-max",
+    # model="qwen3-max",
+    model= "qwen3-vl:4b",
     messages=[
         {"role": "system", "content": "You are a helpful assistant."},
-        {"role": "user", "content": "你是谁？"},
+        {"role": "user", "content": "什么是Java？"},
     ],
     stream=True
 )
