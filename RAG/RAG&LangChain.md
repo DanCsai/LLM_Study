@@ -1,5 +1,5 @@
-# LangChain
-## LangChain功能
+# LangChain与RAG实践指南
+## 1.1 LangChain功能
 LangChain是一个开发LLM相关业务功能的集大成者
 * 优化提示词
 * 调用模型
@@ -8,7 +8,7 @@ LangChain是一个开发LLM相关业务功能的集大成者
 * 构建功能的执行链
 * 构建Agent 智能体
 
-## LangChain安装
+## 1.2 LangChain安装
 pip install langchain langchain-community langchain-ollama dashscope chromadb
 * langchain:核心包
 * langchain-community:社区支持包，提供了更多的第三方模型调用(我们用的阿里云千问模型就需要这个包)
@@ -16,7 +16,7 @@ pip install langchain langchain-community langchain-ollama dashscope chromadb
 * dashscope:阿里云通义千问的Python SDK
 * chromadb:轻量向量数据库
 
-## Langchain使用大语言模型示例
+## 1.3 Langchain使用大语言模型示例
 以python为示例，展示如何通过LangChain调用通义千问模型和ollama本地模型
 - invoke: 调用模型 一次性返回完整结构
 - stream: 流式输出 逐段流式输出
@@ -45,7 +45,7 @@ for chunk in streamRes:
 
 ```
 
-## LangChain使用聊天模型示例
+## 1.4 LangChain使用聊天模型示例
 聊天模型是一种特殊的语言模型，它可以与用户进行交互，理解用户的问题并生成有意义的回答。
 
 如果不想使用通义千问要使用本地ollama 更换一下导包即可
@@ -108,7 +108,7 @@ for chunk in streamRes:
 
 ```
 
-## LangChain 使用文本嵌入模型
+## 1.5 LangChain 使用文本嵌入模型
 ```angular2html
 from langchain_community.embeddings import  DashScopeEmbeddings
 
@@ -125,7 +125,7 @@ print(model.embed_documents(["你好", "我爱你"])) # 批量文本转向量
 
 ```
 
-## LangChain提示词模版
+## 1.6 LangChain提示词模版
 提示词优化在模型应用中非常重要，LangChain提供了PromptTemplate类，用来协助优化提示词。
 
 PromptTempLate表示提示词模板，可以构建一个自定义的基础提示词模板，支持变量的注入，最终生成所需的提示词。
@@ -155,7 +155,7 @@ print(chain_res) #输出"王浩宇"
 ```
 # RAG （检索增强生成）
 
-## RAG （更高级的提问技巧）
+## 2.1 RAG （更高级的提问技巧）
 检索增强生成技术：利用检索外部文档提升生成结果质量
 * 大模型有的四大问题 ：领域知识匮乏、 幻觉问题、 过时问题 、安全问题
 * RAG 解决： 领域知识私有数据、实时数据、减少生成不稳定性 、增强数据安全
@@ -170,6 +170,31 @@ RAG的价值
 * 无需重新训练模型 ： 相比于微调（fine-tuning），RAG无需重新训练模型，只需要更新向量数据库即可
  
 
-## 什么是向量
+## 2.1 RAG核心价值与工作流程
+ 
+```
++----------------+     +----------------+     +----------------+
+|  文档知识库    | --> |  向量数据库    | <-- |  用户提问      |
++----------------+     +----------------+     +----------------+
+        |                        |                      |
+        v                        v                      v
++----------------+     +----------------+     +----------------+
+|  文档处理模块  |     |  检索模块      |     |  提示词构建    |
++----------------+     +----------------+     +----------------+
+        |                        |                      |
+        +------------------------+----------------------+
+                                   |
+                                   v
+                            +----------------+
+                            |  LLM生成模块  |
+                            +----------------+
+                                   |
+                                   v
+                            +----------------+
+                            |  结果返回      |
+                            +----------------+
+```
+
+## 2.2 什么是向量
 * 向量(Vector)就是文本的"数学身份证":它把一段文字的语义信息，转换成一串固定长度的数字列表，让计算机能"看懂"文字的含义并做相似度计算。 
 * 简单来说，就是让计算机更方便的理解不同的文本内容，是否表述的是一个意思。
